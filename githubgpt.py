@@ -1,14 +1,14 @@
 import requests
 import openai
 
-# Set up OpenAI API credentials
-openai.api_key = 'YOUR_OPENAI_API_KEY'
-
 
 class GitHubGPT:
-    def __init__(self, repo_url):
+    def __init__(self, repo_url, api_key):
         self.repo_url = repo_url
         self.code_files = []
+
+        # Set up OpenAI API credentials
+        openai.api_key = api_key
 
     def fetch_code_from_github(self):
         # Extract the repository owner and name from the URL
