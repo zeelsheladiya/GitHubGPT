@@ -12,18 +12,18 @@ Once the code files are obtained, GitHubGPT offers a seamless integration with A
 GitHubGPT streamlines the process of analyzing code repositories, eliminating the need for manual exploration or switching between different tools and platforms. It enables you to leverage the power of AI-driven natural language processing directly within your GitHub workflow.
 
 Key Features:
-[] Fetch code files from GitHub repositories effortlessly
-[] Support for both public and private repositories
-[] Seamless integration with AutoGPT for enhanced code understanding and analysis
-[] Quick and efficient retrieval of code files from GitHub repositories
-[] Ability to handle repositories of any size and complexity
-[] Access to a wide range of programming languages and file types
-[] Real-time assistance and insights based on AI-generated responses
-[] Streamlined workflow within the familiar GitHub environment
-[] Facilitates code exploration, problem-solving, and idea generation
-[] Simplifies collaboration and knowledge sharing among developers and researchers
-[] Helps accelerate development cycles and improve code quality
-[] Flexible and customizable to suit specific use cases and requirements
-[] Regular updates and improvements to ensure compatibility and performance
+- [ ] Fetch code files from GitHub repositories effortlessly
+- [ ] Support for both public and private repositories
+- [ ] Seamless integration with AutoGPT for enhanced code understanding and analysis
+- [ ] Quick and efficient retrieval of code files from GitHub repositories
+- [ ] Ability to handle repositories of any size and complexity
+- [ ] Access to a wide range of programming languages and file types
+- [ ] Real-time assistance and insights based on AI-generated responses
+- [ ] Streamlined workflow within the familiar GitHub environment
+- [ ] Facilitates code exploration, problem-solving, and idea generation
+- [ ] Simplifies collaboration and knowledge sharing among developers and researchers
+- [ ] Helps accelerate development cycles and improve code quality
+- [ ] Flexible and customizable to suit specific use cases and requirements
+- [ ] Regular updates and improvements to ensure compatibility and performance
 
 GitHubGPT empowers users with an intelligent and intuitive toolset that leverages the power of ChatGPT and GitHub repositories. Whether you are a developer seeking assistance with a complex codebase or a researcher exploring patterns and trends, GitHubGPT provides an efficient and effective solution to enhance your coding experience. Unlock the full potential of your GitHub repositories with GitHubGPT and discover new insights and possibilities in your code.
