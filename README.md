@@ -3,6 +3,8 @@ GitHubGPT: ChatGPT Plugin for Reading GitHub Repository
 
 -------
 
+> **_NOTE:_**  This repository is not complete. It is still a work in progress. The descriptions below outline the goals of this repository.
+
 GitHubGPT is a powerful ChatGPT plugin designed to enhance the capabilities of AutoGPT by enabling it to read and understand GitHub repositories. With this plugin, you can seamlessly integrate AutoGPT with GitHub, allowing you to analyze, explore, and extract insights from code repositories hosted on GitHub.
 
 By leveraging the functionalities of the GitHub API, GitHubGPT facilitates the retrieval of code files from any GitHub repository. It enables you to specify the repository URL and effortlessly fetches the contents, including various code files. This plugin supports both public and private repositories, granting you access to a wide range of codebases.
