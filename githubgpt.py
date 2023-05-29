@@ -65,10 +65,3 @@ class GitHubGPT:
         # Return the generated AI text
         return response.choices[0].text
 
-
-# Example usage
-repo_url = "https://github.com/owner/repo"
-github_gpt = GitHubGPT(repo_url)
-github_gpt.fetch_code_from_github()
-ai_text = github_gpt.generate_ai_text()
-print(ai_text)
