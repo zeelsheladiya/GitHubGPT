@@ -1,11 +1,11 @@
 # GitHubGPT
-GitHubGPT: ChatGPT Plugin for Reading GitHub Repository
+GitHubGPT: GPT Plugin for Reading GitHub Repository
 
 -------
 
 > **_NOTE:_**  This repository is not complete. It is still a work in progress. The descriptions below outline the goals of this repository.
 
-GitHubGPT is a powerful ChatGPT plugin designed to enhance the capabilities of AutoGPT by enabling it to read and understand GitHub repositories. With this plugin, you can seamlessly integrate AutoGPT with GitHub, allowing you to analyze, explore, and extract insights from code repositories hosted on GitHub.
+GitHubGPT is a powerful GPT plugin designed to enhance the capabilities of AutoGPT by enabling it to read and understand GitHub repositories. With this plugin, you can seamlessly integrate AutoGPT with GitHub, allowing you to analyze, explore, and extract insights from code repositories hosted on GitHub.
 
 By leveraging the functionalities of the GitHub API, GitHubGPT facilitates the retrieval of code files from any GitHub repository. It enables you to specify the repository URL and effortlessly fetches the contents, including various code files. This plugin supports both public and private repositories, granting you access to a wide range of codebases.
 
@@ -28,4 +28,4 @@ Key Features:
 - [ ] Flexible and customizable to suit specific use cases and requirements
 - [ ] Regular updates and improvements to ensure compatibility and performance
 
-GitHubGPT empowers users with an intelligent and intuitive toolset that leverages the power of ChatGPT and GitHub repositories. Whether you are a developer seeking assistance with a complex codebase or a researcher exploring patterns and trends, GitHubGPT provides an efficient and effective solution to enhance your coding experience. Unlock the full potential of your GitHub repositories with GitHubGPT and discover new insights and possibilities in your code.
+GitHubGPT empowers users with an intelligent and intuitive toolset that leverages the power of GPT and GitHub repositories. Whether you are a developer seeking assistance with a complex codebase or a researcher exploring patterns and trends, GitHubGPT provides an efficient and effective solution to enhance your coding experience. Unlock the full potential of your GitHub repositories with GitHubGPT and discover new insights and possibilities in your code.

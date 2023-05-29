@@ -1,14 +1,15 @@
 import requests
-import openai
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 class GitHubGPT:
-    def __init__(self, repo_url, api_key):
+    def __init__(self, repo_url, model_name):
         self.repo_url = repo_url
         self.code_files = []
 
-        # Set up OpenAI API credentials
-        openai.api_key = api_key
+        # Load the tokenizer and model
+        self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+        self.model = GPT2LMHeadModel.from_pretrained(model_name)
 
     def fetch_code_from_github(self):
         # Extract the repository owner and name from the URL
@@ -55,13 +56,13 @@ class GitHubGPT:
         # Concatenate all code files into a single string
         code = "\n".join(self.code_files)
 
-        # Generate AI text using AutoGPT
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=code,
-            max_tokens=100
-        )
+        # Tokenize the code
+        inputs = self.tokenizer.encode(code, return_tensors='pt')
+
+        # Generate AI text using the GPT model
+        outputs = self.model.generate(inputs, max_length=100, num_return_sequences=1)
+        generated_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
         # Return the generated AI text
-        return response.choices[0].text
+        return generated_text
 
