@@ -34,15 +34,12 @@ Key Features:
 
 The GitHub Code Generation AI Model follows the following steps:
 
-1. Data Collection: Collects a dataset of code samples from the target GitHub repository using the GitHub API or web scraping techniques.
+1. Data Collection: Given a GitHub repository link, the model collects code samples from all files within the repository. It utilizes the GitHub API or web scraping techniques to retrieve the code snippets.
+2. Data Preprocessing: The collected code samples undergo preprocessing to ensure they are in a suitable format for training. This involves removing comments, standardizing code formatting, and handling any specific code syntax or language requirements.
+3. Model Training: Hugging Face's Transformers library is used to train a language model. Transfer learning techniques are employed to fine-tune a pre-trained model, such as GPT-3 or GPT-2, on the code dataset.
+4. Model Evaluation: The trained model's performance is evaluated on a validation set using appropriate metrics for code generation tasks. This evaluation helps assess the model's capabilities and identify areas for improvement.
+5. Code Generation: The trained model is then utilized to generate code suggestions and completions. Given prompts or specific requirements, the model generates code snippets that align with the desired functionality, leveraging its understanding of the codebase from the training process.
 
-2. Data Preprocessing: Cleans and preprocesses the collected code samples, ensuring they are in a suitable format for training. This step involves removing comments, standardizing code formatting, and handling any specific code syntax or language requirements.
-
-3. Model Training: Uses Hugging Face's Transformers library to train a language model. The model can be fine-tuned on the code dataset using transfer learning techniques. Pre-trained models like GPT-3 or GPT-2 can be used as a starting point.
-
-4. Model Evaluation: Evaluates the trained model's performance on a validation set using appropriate metrics for code generation tasks. This step helps assess the model's capabilities and identify areas for improvement.
-
-5. Code Generation: Utilizes the trained model to generate code for the target GitHub repository. Given a prompt or specific requirements, the model generates code suggestions or completions that align with the desired functionality.
 
 ## Getting Started
 
