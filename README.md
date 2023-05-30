@@ -3,7 +3,7 @@ GitHubGPT: GitHub Code Generation AI Model
 
 -------
 
-> **_NOTE:_**  This repository is not complete. It is still a work in progress. The descriptions below outline the goals of this repository.
+> **_NOTE:_**  This repository is not completed. It is still a work in progress. The descriptions below outline the goals of this repository.
 
 GitHubGPT is a powerful GPT plugin allowing you to analyze, explore, and extract insights from code repositories hosted on GitHub.
 
