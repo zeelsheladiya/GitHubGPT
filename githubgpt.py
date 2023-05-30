@@ -1,68 +1,50 @@
+import os
 import requests
+import torch
+from github import Github
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 class GitHubGPT:
-    def __init__(self, repo_url, model_name):
-        self.repo_url = repo_url
-        self.code_files = []
+    def __init__(self, github_token):
+        self.github_token = github_token
+        self.model_name = 'gpt2'
+        self.model = GPT2LMHeadModel.from_pretrained(self.model_name)
+        self.tokenizer = GPT2Tokenizer.from_pretrained(self.model_name)
 
-        # Load the tokenizer and model
-        self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-        self.model = GPT2LMHeadModel.from_pretrained(model_name)
+    def clone_repository(self, repo_url):
+        repo_name = repo_url.split('/')[-1]
+        os.system(f'git clone {repo_url}')
+        return repo_name
 
-    def fetch_code_from_github(self):
-        # Extract the repository owner and name from the URL
-        owner, repo = self.extract_owner_and_repo()
+    def get_code_snippets(self, repo_name):
+        code_snippets = []
+        for root, dirs, files in os.walk(repo_name):
+            for file in files:
+                file_path = os.path.join(root, file)
+                with open(file_path, 'r') as f:
+                    code_snippets.append(f.read())
+        return code_snippets
 
-        # API endpoint to fetch the repository contents
-        url = f'https://api.github.com/repos/{owner}/{repo}/contents'
+    def generate_code_suggestions(self, prompt, code_snippets):
+        suggestions = []
+        input_ids = self.tokenizer.encode(prompt, return_tensors='pt')
+        for code in code_snippets:
+            code_ids = self.tokenizer.encode(code, return_tensors='pt')
+            input_ids = input_ids.to(self.model.device)
+            code_ids = code_ids.to(self.model.device)
+            input_ids = torch.cat([input_ids, code_ids], dim=1)
+            output = self.model.generate(input_ids, max_length=100, num_return_sequences=1, temperature=0.8)
+            decoded_code = self.tokenizer.decode(output[0], skip_special_tokens=True)
+            suggestions.append(decoded_code)
+        return suggestions
 
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            contents = response.json()
+    def cleanup_repository(self, repo_name):
+        os.system(f'rm -rf {repo_name}')
 
-            for item in contents:
-                # Fetch only files (excluding directories)
-                if item['type'] == 'file':
-                    file_url = item['download_url']
-                    file_content = self.fetch_file_content(file_url)
-                    self.code_files.append(file_content)
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error occurred while fetching code from GitHub: {e}")
-
-    def extract_owner_and_repo(self):
-        # Extract owner and repo name from the GitHub repository URL
-        # Modify this function based on the URL pattern you expect
-        # Example URL: https://github.com/owner/repo
-        parts = self.repo_url.split('/')
-        owner = parts[-2]
-        repo = parts[-1]
-        return owner, repo
-
-    def fetch_file_content(self, file_url):
-        try:
-            response = requests.get(file_url)
-            response.raise_for_status()
-            return response.text
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error occurred while fetching file content: {e}")
-            return ''
-
-    def generate_ai_text(self):
-        # Concatenate all code files into a single string
-        code = "\n".join(self.code_files)
-
-        # Tokenize the code
-        inputs = self.tokenizer.encode(code, return_tensors='pt')
-
-        # Generate AI text using the GPT model
-        outputs = self.model.generate(inputs, max_length=100, num_return_sequences=1)
-        generated_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-        # Return the generated AI text
-        return generated_text
-
+    def generate_suggestions_for_repository(self, repo_url, prompt):
+        repo_name = self.clone_repository(repo_url)
+        code_snippets = self.get_code_snippets(repo_name)
+        suggestions = self.generate_code_suggestions(prompt, code_snippets)
+        self.cleanup_repository(repo_name)
+        return suggestions
