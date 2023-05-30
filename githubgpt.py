@@ -26,7 +26,7 @@ class GitHubGPT:
                     code_snippets.append(f.read())
         return code_snippets
 
-    def generate_code_suggestions(self, prompt, code_snippets):
+    def generate_code_suggestions(self, prompt, code_snippets, num_suggestions=5, max_length=100, temperature=0.8):
         suggestions = []
         input_ids = self.tokenizer.encode(prompt, return_tensors='pt')
         for code in code_snippets:
@@ -34,9 +34,9 @@ class GitHubGPT:
             input_ids = input_ids.to(self.model.device)
             code_ids = code_ids.to(self.model.device)
             input_ids = torch.cat([input_ids, code_ids], dim=1)
-            output = self.model.generate(input_ids, max_length=100, num_return_sequences=1, temperature=0.8)
-            decoded_code = self.tokenizer.decode(output[0], skip_special_tokens=True)
-            suggestions.append(decoded_code)
+            output = self.model.generate(input_ids, max_length=max_length, num_return_sequences=num_suggestions, temperature=temperature)
+            decoded_codes = self.tokenizer.decode(output[:, input_ids.shape[1]:], skip_special_tokens=True)
+            suggestions.append(decoded_codes)
         return suggestions
 
     def cleanup_repository(self, repo_name):
