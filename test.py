@@ -1,16 +1,13 @@
 from githubgpt import GitHubGPT
 
 
-# Example usage
-github_token = 'YOUR_GITHUB_TOKEN'
-repo_url = 'https://github.com/username/repository'
-prompt = "function add(a, b) {"
+# Usage example
+access_token = 'your_github_personal_access_token'
+repo_url = 'https://github.com/username/repository_name'
 
-github_gpt = GitHubGPT(github_token)
-suggestions = github_gpt.generate_suggestions_for_repository(repo_url, prompt)
+github_gpt = GitHubGPT(access_token, repo_url)
+github_gpt.read_files()
 
-print("Generated code suggestions:")
-for i, suggestion in enumerate(suggestions):
-    print(f"Code suggestion {i+1}:")
-    print(suggestion)
-    print()
+question = "What is the main function of this code?"
+answer = github_gpt.answer_question(question)
+print(answer)

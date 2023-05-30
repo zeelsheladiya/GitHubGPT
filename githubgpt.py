@@ -1,50 +1,45 @@
-import os
-import requests
-import torch
+import base64
 from github import Github
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 class GitHubGPT:
-    def __init__(self, github_token):
-        self.github_token = github_token
-        self.model_name = 'gpt2'
-        self.model = GPT2LMHeadModel.from_pretrained(self.model_name)
-        self.tokenizer = GPT2Tokenizer.from_pretrained(self.model_name)
+    def __init__(self, access_token, repo_url, model_name='gpt2'):
+        self.access_token = access_token
+        self.repo_url = repo_url
+        self.owner, self.repo_name = self._extract_repo_info()
+        self.github = Github(self.access_token)
+        self.repo = self._get_repo()
+        self.file_contents = []
 
-    def clone_repository(self, repo_url):
-        repo_name = repo_url.split('/')[-1]
-        os.system(f'git clone {repo_url}')
-        return repo_name
+        self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+        self.model = GPT2LMHeadModel.from_pretrained(model_name)
 
-    def get_code_snippets(self, repo_name):
-        code_snippets = []
-        for root, dirs, files in os.walk(repo_name):
-            for file in files:
-                file_path = os.path.join(root, file)
-                with open(file_path, 'r') as f:
-                    code_snippets.append(f.read())
-        return code_snippets
+    def _extract_repo_info(self):
+        repo_info = self.repo_url.split('/')[-2:]
+        return repo_info[0], repo_info[1]
 
-    def generate_code_suggestions(self, prompt, code_snippets, num_suggestions=5, max_length=100, temperature=0.8):
-        suggestions = []
+    def _get_repo(self):
+        return self.github.get_user(self.owner).get_repo(self.repo_name)
+
+    def read_files(self, contents=None):
+        if contents is None:
+            contents = self.repo.get_contents('')
+
+        for content in contents:
+            if content.type == 'dir':
+                self.read_files(self.repo.get_contents(content.path))
+            else:
+                file_content = base64.b64decode(content.content).decode('utf-8')
+                self.file_contents.append(file_content)
+
+    def answer_question(self, question, max_length=100):
+        prompt = f"{question}\n\n"
+        for file_content in self.file_contents:
+            prompt += f"File content:\n{file_content}\n\n"
+
         input_ids = self.tokenizer.encode(prompt, return_tensors='pt')
-        for code in code_snippets:
-            code_ids = self.tokenizer.encode(code, return_tensors='pt')
-            input_ids = input_ids.to(self.model.device)
-            code_ids = code_ids.to(self.model.device)
-            input_ids = torch.cat([input_ids, code_ids], dim=1)
-            output = self.model.generate(input_ids, max_length=max_length, num_return_sequences=num_suggestions, temperature=temperature)
-            decoded_codes = self.tokenizer.decode(output[:, input_ids.shape[1]:], skip_special_tokens=True)
-            suggestions.append(decoded_codes)
-        return suggestions
+        output = self.model.generate(input_ids, max_length=max_length, num_return_sequences=1)
+        answer = self.tokenizer.decode(output[0], skip_special_tokens=True).strip()
 
-    def cleanup_repository(self, repo_name):
-        os.system(f'rm -rf {repo_name}')
-
-    def generate_suggestions_for_repository(self, repo_url, prompt):
-        repo_name = self.clone_repository(repo_url)
-        code_snippets = self.get_code_snippets(repo_name)
-        suggestions = self.generate_code_suggestions(prompt, code_snippets)
-        self.cleanup_repository(repo_name)
-        return suggestions
+        return answer
