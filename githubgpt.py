@@ -2,7 +2,6 @@ import base64
 from github import Github
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
-
 class GitHubGPT:
     def __init__(self, access_token, repo_url, model_name='gpt2'):
         self.access_token = access_token
@@ -33,13 +32,17 @@ class GitHubGPT:
                 file_content = base64.b64decode(content.content).decode('utf-8')
                 self.file_contents.append(file_content)
 
-    def answer_question(self, question, max_length=100):
-        prompt = f"{question}\n\n"
+    def generate_response(self, prompt, max_length=100, code_suggestion=False):
+        if code_suggestion:
+            prompt = f"Generate code suggestion for the following:\n{prompt}\n\n"
+        else:
+            prompt = f"{prompt}\n\n"
+
         for file_content in self.file_contents:
             prompt += f"File content:\n{file_content}\n\n"
 
         input_ids = self.tokenizer.encode(prompt, return_tensors='pt')
         output = self.model.generate(input_ids, max_length=max_length, num_return_sequences=1)
-        answer = self.tokenizer.decode(output[0], skip_special_tokens=True).strip()
+        response = self.tokenizer.decode(output[0], skip_special_tokens=True).strip()
 
-        return answer
+        return response
